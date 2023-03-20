@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import AppProfile from './AppProfile';
-import AppCounter from './AppCounter';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import AppXY from './AppXY';
+import AppMentors from './AppMentors';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AppCounter />
+    <AppMentors />
   </React.StrictMode>
 );
 
