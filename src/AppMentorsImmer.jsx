@@ -1,34 +1,29 @@
 import React, { useState } from "react";
+import { useImmer } from "use-immer";
 
 export default function AppMentor() {
-  const [person, setPerson] = useState(initialPerson);
+  const [person, updatePerson] = useImmer(initialPerson);
   const handleUpdate = () => {
     const prev = prompt(`Who's your mentor?`);
     const current = prompt(`Who is your new mentor?`);
-    setPerson((person) => ({
-      ...person,
-      mentors: person.mentors.map((mentor) => {
-        if (mentor.name === prev) {
-          return { ...mentor, name: current };
-        }
-        return mentor;
-      }),
-    }));
+    updatePerson((person) => {
+      const mentor = person.mentors.find((m) => m.name === prev);
+      mentor.name = current;
+    });
   };
   const handleAdd = () => {
     const newName = prompt(`Who's your new mentor?`);
     const newTitle = prompt(`What is your mentor's title?`);
-    setPerson((person) => ({
-      ...person,
-      mentors: [...person.mentors, { name: newName, title: newTitle }],
-    }));
+    updatePerson((person) => {
+      person.mentors.push({ name: newName, title: newTitle });
+    });
   };
   const handleDelete = () => {
     const name = prompt(`Who do you want to delete?`);
-    setPerson((person) => ({
-      ...person,
-      mentors: person.mentors.filter((mentor) => mentor.name !== name),
-    }));
+    updatePerson((person) => {
+      const index = person.mentors.findIndex((m) => m.name === name);
+      person.mentors.splice(index, 1);
+    });
   };
   return (
     <div>
