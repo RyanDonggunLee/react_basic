@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
+import personReducer from "./reducer/person-reducer";
 
 export default function AppMentor() {
-  const [person, setPerson] = useState({
-    name: "Ellie",
-    title: "Developer",
-    mentors: [
-      {
-        name: "Bob",
-        title: "Senior Developer",
-      },
-      {
-        name: "James",
-        title: "senior Developer",
-      },
-    ],
-  });
+  const [person, dispatch] = useReducer(personReducer, initialPerson);
+  const handleUpdate = () => {
+    const prev = prompt(`Who's your mentor?`);
+    const current = prompt(`Who is your new mentor?`);
+    dispatch({ type: "updated", prev, current });
+  };
+  const handleAdd = () => {
+    const name = prompt(`Who's your new mentor?`);
+    const title = prompt(`What is your mentor's title?`);
+    dispatch({ type: "added", name, title });
+  };
+  const handleDelete = () => {
+    const name = prompt(`Who do you want to delete?`);
+    dispatch({ type: "deleted", name });
+  };
   return (
     <div>
       <h1>
@@ -28,46 +30,24 @@ export default function AppMentor() {
           </li>
         ))}
       </ul>
-      <button
-        onClick={() => {
-          const prev = prompt(`Who's your mentor?`);
-          const current = prompt(`Who is your new mentor?`);
-          setPerson((person) => ({
-            ...person,
-            mentors: person.mentors.map((mentor) => {
-              if (mentor.name === prev) {
-                return { ...mentor, name: current };
-              }
-              return mentor;
-            }),
-          }));
-        }}
-      >
-        Change Mentor's Name
-      </button>
-      <button
-        onClick={() => {
-          const newName = prompt(`Who's your new mentor?`);
-          const newTitle = prompt(`What is your mentor's title?`);
-          setPerson((person) => ({
-            ...person,
-            mentors: [...person.mentors, { name: newName, title: newTitle }],
-          }));
-        }}
-      >
-        Add Mentor
-      </button>
-      <button
-        onClick={() => {
-          const name = prompt(`Who do you want to delete?`);
-          setPerson((person) => ({
-            ...person,
-            mentors: person.mentors.filter((mentor) => mentor.name !== name),
-          }));
-        }}
-      >
-        Delete Mentor
-      </button>
+      <button onClick={handleUpdate}>Change Mentor's Name</button>
+      <button onClick={handleAdd}>Add Mentor</button>
+      <button onClick={handleDelete}>Delete Mentor</button>
     </div>
   );
 }
+
+const initialPerson = {
+  name: "Ellie",
+  title: "Developer",
+  mentors: [
+    {
+      name: "Bob",
+      title: "Senior Developer",
+    },
+    {
+      name: "James",
+      title: "senior Developer",
+    },
+  ],
+};
